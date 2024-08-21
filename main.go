@@ -1,21 +1,9 @@
 package main
 
-import (
-	"fmt"
-	"strconv"
-)
-
 func main() {
-	blockchain := NewBlockchain()
-	blockchain.CreateBlock("0.4 BTC Transaction from A to B")
-	blockchain.CreateBlock("0.52 BTC Transaction from B to C")
-	for _, block := range blockchain.blocks {
-		fmt.Printf("Previous hash: %x\n", block.PreviousHash)
-		fmt.Printf("Data: %s\n", block.Data)
-		fmt.Printf("Hash: %x\n", block.Hash)
-		fmt.Println()
-		pow := NewProofOfWork(block)
-		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
-		fmt.Println()
-	}
+	bc := NewBlockchain()
+	defer bc.db.Close()
+
+	cli := CLI{bc}
+	cli.Run()
 }
